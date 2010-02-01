@@ -1,0 +1,47 @@
+\documentclass[final,a4wide,11pt]{report}
+\usepackage[hangul]{kotex}
+\usepackage{a4wide}
+\usepackage{pdfsync}
+\usepackage{ifpdf}
+\ifpdf
+  \usepackage[unicode,pdftex,colorlinks]{hyperref}
+  \input glyphtounicode\pdfgentounicode=1
+\else
+  \usepackage[unicode,divpdfm,colorlinks]{hyperref}
+\fi
+
+\usepackage{amsmath, amssymb}
+\usepackage{listings}
+
+\input{macro.tex}
+
+\title{
+\textsc{Structure and Interpretation}\\
+\textsc{of}\\
+\textsc{Computer Programs}\vspace{10pt}\\
+\textsf{Second Edition}\vspace{15pt}\\
+\textsf{연습문제 해답}\\
+}
+\author{
+정승철 \\
+한양대학교 프로그램분석검증연구실
+}
+\date{
+마지막 고침\\
+\today
+}
+
+\newcommand{\SCHEME}[0]{\textsf{Scheme}}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\input{ch01}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

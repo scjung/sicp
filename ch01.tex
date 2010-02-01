@@ -1,0 +1,163 @@
+\chapter{\Large{Building Abstractions with Procedures}}
+\section{Exercise 1.1}
+\begin{lisp}
+> 10
+10
+\end{lisp}
+\begin{lisp}
+> (+ 5 3 4)
+12
+\end{lisp}
+\begin{lisp}
+> (- 9 1)
+8
+\end{lisp}
+\begin{lisp}
+> (/ 6 2)
+3
+\end{lisp}
+\begin{lisp}
+> (+ (* 2 4) (- 4 6))
+> (+ 8 -2)
+6
+\end{lisp}
+\begin{lisp}
+> (define a 3)
+> (define b (+ a 1))
+\end{lisp}
+\begin{lisp}
+> (+ a b (* a b))
+> (+ 3 4 (* 3 4))
+> (+ 3 4 12)
+19
+\end{lisp}
+\begin{lisp}
+> (= a b)
+> (= 3 4)
+#f
+\end{lisp}
+\begin{lisp}
+> (if (and (> b a) (< b (* a b))) b a)
+> (if (and (> 4 3) (< 4 (* 3 4))) 4 3)
+> (if (and #t (< 4 12)) 4 3)
+> (if (and #t #t) 4 3)
+4
+\end{lisp}
+\begin{lisp}
+> (cond ((= a 4) 6)
+        ((= b 4) (+ 6 7 a))
+        (else 25))
+> (cond ((= 3 4) 6)
+        ((= 4 4) (+ 6 7 3))
+        (else 25))
+> (+ 6 7 3)
+16
+\end{lisp}
+\begin{lisp}
+> (+ 2 (if (> b a) b a))
+> (+ 2 (if (> 4 3) 4 3))
+> (+ 2 4)
+6
+\end{lisp}
+\begin{lisp}
+> (* (cond ((> a b) a)
+           ((< a b) b)
+           (else -1))
+     (+ a 1))
+> (* (cond ((> 3 4) 3)
+           ((< 3 4) 4)
+           (else -1))
+     (+ 3 1))
+> (* 4 4)
+16
+\end{lisp}
+
+\section{Exercise 1.2}
+\begin{lisp}
+(/ (+ 5 4
+      (- 2
+         (- 3
+            (+ 6 (/ 4 5)))))
+   (* 3
+      (- 6 2)
+      (- 2 7)))
+\end{lisp}
+
+\section{Exercise 1.3}
+\begin{lisp}
+(define (square x) (* x x))
+(define (sum-ex x y z)
+  (if (> x y)
+      (+ (square x) (square (if (> y z) y z)))
+      (+ (square y) (square (if (> x z) x z)))))
+\end{lisp}
+
+\section{Exercise 1.4}
+두번째 인자가 양수일때는 연산자가 \texttt{+}가 되므로 두 인자를 더하며,
+음수일때는 연산자가 \texttt{-}가 되므로 두 인자를 뺀다.
+
+\section{Exercise 1.5}
+우선 applicative-order evaluation의 경우에는 다음과 같이 계산된다.
+\begin{lisp}
+> (test 0 (p))
+> (test 0 (p))
+> (test 0 (p))
+  ...
+\end{lisp}
+이 경우에는 프로시저 \texttt{test}를 펼치기에 앞서 주어진 인자를 먼저 계산하여야
+한다. 그런데 두번째 인자 \texttt{p}의 정의에 따르면 계산을 위해 아무리
+치환하여도 다시 자기 자신으로 바뀌어 버리므로 치환은 영원히 끝나지 않는다. 즉
+\texttt{(test 0 (p))}을 applicative-order evaluation 방식으로 계산하는 것은
+불가능하다.\\
+
+반면에 normal-order evaluation의 경우에는 다음과 같이 계산된다.
+\begin{lisp}
+> (test 0 (p))
+> (if (= 0 0)
+      0
+      (p))
+0
+\end{lisp}
+\texttt{p}에 대한 계산은 필요치 않으므로 무시되며, 따라서 \texttt{(test 0
+  (p))}는 정상적으로 계산된다.
+
+\section{Exercise 1.6}
+
+\SCHEME의 프로시저 계산은 applicative-order evaluation 방식으로 수행되므로,
+\texttt{new-if}를 풀어내기 전 먼저 인자로 들어오는 \texttt{predicate},
+\texttt{then-clause}, \texttt{else-clause}를 계산하여야 한다. 그런데 새로
+작성된 \texttt{sqrt-iter}에서 \texttt{new-if}에 주어지는
+\texttt{else-clause}를 계산하려면 \texttt{sqrt-iter}를 계산해야 한다. 즉,
+\texttt{sqrt-iter}를 계산하기 위해서 \texttt{sqrt-iter}를 계산해야 하므로
+안자가 끝없이 풀리면서 프로시저 계산이 끝나지 않게 된다.\\
+
+반면에 기존의 \texttt{if}는 \texttt{predicate}을 먼저 계산하고 난 후에
+\texttt{then-clause}, \texttt{else-clause} 중 해당하는 표현식을 계산하므로
+이러한 문제가 발생하지 않는다.
+
+\section{Exercise 1.7}
+
+다음과 같이, 아주 작은 수에 대해서는 정확한 제곱근을 찾지
+못한다. \texttt{good-enough?}에 쓰인 허용치으로 얻을 수 있는 정확도가
+구하려는 제곱근에 못 미치기 때문이다.
+
+\begin{lisp}
+> (sqrt (square 0.001))
+0.03126065525445276
+\end{lisp}
+
+또한 아주 큰 수에 대해서는 실수값 정확도의 한계로 인해 몫과 평균값이 정확히
+구해지지 않아, 그 차이가 \texttt{good-enough?}에 쓰인 허용치 밖을 맴도는
+현상이 발생할 수 있다. 이런 경우에는 계산이 끝나지 않게 된다. 예를 들어 다음과
+같은 표현식은 대부분의 컴퓨터에서 계산해 낼 수 없다.
+
+\begin{lisp}
+> (sqrt 1e13)
+\end{lisp}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "master"
+%%% End: 
