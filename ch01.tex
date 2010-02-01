@@ -1,5 +1,5 @@
 \chapter{\Large{Building Abstractions with Procedures}}
-\section{Exercise 1.1}
+\exercise{1.1}
 \begin{lisp}
 > 10
 10
@@ -72,7 +72,7 @@
 16
 \end{lisp}
 
-\section{Exercise 1.2}
+\exercise{1.2}
 \begin{lisp}
 (/ (+ 5 4
       (- 2
@@ -83,7 +83,7 @@
       (- 2 7)))
 \end{lisp}
 
-\section{Exercise 1.3}
+\exercise{1.3}
 \begin{lisp}
 (define (square x) (* x x))
 (define (sum-ex x y z)
@@ -92,11 +92,11 @@
       (+ (square y) (square (if (> x z) x z)))))
 \end{lisp}
 
-\section{Exercise 1.4}
+\exercise{1.4}
 두번째 인자가 양수일때는 연산자가 \texttt{+}가 되므로 두 인자를 더하며,
 음수일때는 연산자가 \texttt{-}가 되므로 두 인자를 뺀다.
 
-\section{Exercise 1.5}
+\exercise{1.5}
 우선 applicative-order evaluation의 경우에는 다음과 같이 계산된다.
 \begin{lisp}
 > (test 0 (p))
@@ -121,7 +121,7 @@
 \texttt{p}에 대한 계산은 필요치 않으므로 무시되며, 따라서 \texttt{(test 0
   (p))}는 정상적으로 계산된다.
 
-\section{Exercise 1.6}
+\exercise{1.6}
 
 \SCHEME의 프로시저 계산은 applicative-order evaluation 방식으로 수행되므로,
 \texttt{new-if}를 풀어내기 전 먼저 인자로 들어오는 \texttt{predicate},
@@ -135,10 +135,10 @@
 \texttt{then-clause}, \texttt{else-clause} 중 해당하는 표현식을 계산하므로
 이러한 문제가 발생하지 않는다.
 
-\section{Exercise 1.7}
+\exercise{1.7}
 
-다음과 같이, 아주 작은 수에 대해서는 정확한 제곱근을 찾지
-못한다. \texttt{good-enough?}에 쓰인 허용치으로 얻을 수 있는 정확도가
+교재의 프로그램으로는 다음과 같이 아주 작은 수의 제곱근을 정확히 찾지
+못한다. 이는 \texttt{good-enough?}에서 쓰인 허용치로 얻을 수 있는 정확도가
 구하려는 제곱근에 못 미치기 때문이다.
 
 \begin{lisp}
@@ -146,7 +146,7 @@
 0.03126065525445276
 \end{lisp}
 
-또한 아주 큰 수에 대해서는 실수값 정확도의 한계로 인해 몫과 평균값이 정확히
+반대로 아주 큰 수에 대해서는 실수값 정확도의 한계로 인해 몫과 평균값이 정확히
 구해지지 않아, 그 차이가 \texttt{good-enough?}에 쓰인 허용치 밖을 맴도는
 현상이 발생할 수 있다. 이런 경우에는 계산이 끝나지 않게 된다. 예를 들어 다음과
 같은 표현식은 대부분의 컴퓨터에서 계산해 낼 수 없다.
@@ -155,7 +155,60 @@
 > (sqrt 1e13)
 \end{lisp}
 
+다음은 이러한 문제를 해결하기 위해 교재에서 제안한 방식대로 구현한 코드이다
+(이전과 동일한 프로시저는 생략함).
 
+\begin{lisp}
+(define (good-enough? old-guess guess)
+  (< (abs (- old-guess guess)) 0.00001))
+
+(define (sqrt-iter old-guess guess x)
+  (if (good-enough? old-guess guess)
+      guess
+      (sqrt-iter guess
+                 (improve guess x)
+                 x)))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 (improve 1.0 x) x))
+\end{lisp}
+
+9,10번째 줄에 새로 정의된 \texttt{good-enough?} 프로시저가 나와 있다. 인자
+\texttt{old-guess}는 이전에 찾아낸 제곱근을, \texttt{guess}는
+\texttt{old-guess}를 바탕으로 좀 더 정확히 구한 제곱근을 의미한다. 이 둘
+사이의 차가 특정 수 이하가 되면 (즉, \texttt{improve} 프로시저가 만들어낸
+차이가 미미할 경우) \texttt{sqrt-iter}는 계산을 마치게 된다. 19,20번째 줄의
+\texttt{sqrt} 역시 변경되었는데, 이는 맨 처음 단계에서 항상 \texttt{improve}를
+수행하도록 하기 위함이다.\\
+
+다음은 새로 작성한 프로그램으로 아주 작은 수와 큰 수의 제곱근을 구한
+것이다. 이전과 달리 문제없이 제곱근을 구할 수 있다.
+\begin{lisp}
+> (sqrt (square 0.001))
+0.0010000001533016628
+> (sqrt 1e13)
+3162277.6601683795
+\end{lisp}
+
+\exercise{1.8}
+
+앞에서 작성한 제곱근 프로그램에서 \texttt{improve} 프로시저만 다음과 같이
+수정하면 쉽게 구현할 수 있다.
+
+\begin{lisp}
+(define (improve guess x)
+  (/ (+ (/ x (square guess)) (* 2 guess)) 3))
+\end{lisp}
+
+다음은 작성한 프로그램으로 여러 세제곱근을 구한 것이다.
+\begin{lisp}
+> (sqrt 8)
+2.000000000012062
+> (sqrt (* 0.001 0.001 0.001))
+0.0010000009808132022
+> (sqrt (* 1e13 1e13 1e13))
+10000000000000.0
+\end{lisp}
 
 %%% Local Variables: 
 %%% mode: latex
