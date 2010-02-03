@@ -2,50 +2,50 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.1}
-\begin{lisp}
+\begin{scheme}
 > 10
 10
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (+ 5 3 4)
 12
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (- 9 1)
 8
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (/ 6 2)
 3
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (+ (* 2 4) (- 4 6))
 > (+ 8 -2)
 6
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (define a 3)
 > (define b (+ a 1))
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (+ a b (* a b))
 > (+ 3 4 (* 3 4))
 > (+ 3 4 12)
 19
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (= a b)
 > (= 3 4)
 #f
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (if (and (> b a) (< b (* a b))) b a)
 > (if (and (> 4 3) (< 4 (* 3 4))) 4 3)
 > (if (and #t (< 4 12)) 4 3)
 > (if (and #t #t) 4 3)
 4
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (cond ((= a 4) 6)
         ((= b 4) (+ 6 7 a))
         (else 25))
@@ -54,14 +54,14 @@
         (else 25))
 > (+ 6 7 3)
 16
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (+ 2 (if (> b a) b a))
 > (+ 2 (if (> 4 3) 4 3))
 > (+ 2 4)
 6
-\end{lisp}
-\begin{lisp}
+\end{scheme}
+\begin{scheme}
 > (* (cond ((> a b) a)
            ((< a b) b)
            (else -1))
@@ -72,11 +72,11 @@
      (+ 3 1))
 > (* 4 4)
 16
-\end{lisp}
+\end{scheme}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.2}
-\begin{lisp}
+\begin{scheme}
 (/ (+ 5 4
       (- 2
          (- 3
@@ -84,17 +84,11 @@
    (* 3
       (- 6 2)
       (- 2 7)))
-\end{lisp}
+\end{scheme}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.3}
-\begin{lisp}
-(define (square x) (* x x))
-(define (sum-ex x y z)
-  (if (> x y)
-      (+ (square x) (square (if (> y z) y z)))
-      (+ (square y) (square (if (> x z) x z)))))
-\end{lisp}
+\schemein{./src/ch01-ex03.ss}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.4}
@@ -104,12 +98,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.5}
 우선 applicative-order evaluation의 경우에는 다음과 같이 계산된다.
-\begin{lisp}
+\begin{scheme}
 > (test 0 (p))
 > (test 0 (p))
 > (test 0 (p))
   ...
-\end{lisp}
+\end{scheme}
 이 경우에는 프로시저 \texttt{test}를 펼치기에 앞서 주어진 인자를 먼저 계산하여야
 한다. 그런데 두번째 인자 \texttt{p}의 정의에 따르면 계산을 위해 아무리
 치환하여도 다시 자기 자신으로 바뀌어 버리므로 치환은 영원히 끝나지 않는다. 즉
@@ -117,13 +111,13 @@
 불가능하다.\\
 
 반면에 normal-order evaluation의 경우에는 다음과 같이 계산된다.
-\begin{lisp}
+\begin{scheme}
 > (test 0 (p))
 > (if (= 0 0)
       0
       (p))
 0
-\end{lisp}
+\end{scheme}
 \texttt{p}에 대한 계산은 필요치 않으므로 무시되며, 따라서 \texttt{(test 0
   (p))}는 정상적으로 계산된다.
 
@@ -149,37 +143,24 @@
 못한다. 이는 \texttt{good-enough?}에서 쓰인 허용치로 얻을 수 있는 정확도가
 구하려는 제곱근에 못 미치기 때문이다.
 
-\begin{lisp}
+\begin{scheme}
 > (sqrt (square 0.001))
 0.03126065525445276
-\end{lisp}
+\end{scheme}
 
 반대로 아주 큰 수에 대해서는 실수값 정확도의 한계로 인해 몫과 평균값이 정확히
 구해지지 않아, 그 차이가 \texttt{good-enough?}에 쓰인 허용치 밖을 맴도는
 현상이 발생할 수 있다. 이런 경우에는 계산이 끝나지 않게 된다. 예를 들어 다음과
 같은 표현식은 대부분의 컴퓨터에서 계산해 낼 수 없다.
 
-\begin{lisp}
+\begin{scheme}
 > (sqrt 1e13)
-\end{lisp}
+\end{scheme}
 
 다음은 이러한 문제를 해결하기 위해 교재에서 제안한 방식대로 구현한 코드이다
 (이전과 동일한 프로시저는 생략함).
 
-\begin{lisp}
-(define (good-enough? old-guess guess)
-  (< (abs (- old-guess guess)) 0.00001))
-
-(define (sqrt-iter old-guess guess x)
-  (if (good-enough? old-guess guess)
-      guess
-      (sqrt-iter guess
-                 (improve guess x)
-                 x)))
-
-(define (sqrt x)
-  (sqrt-iter 1.0 (improve 1.0 x) x))
-\end{lisp}
+\schemein{./src/ch01-ex07.ss}
 
 9,10번째 줄에 새로 정의된 \texttt{good-enough?} 프로시저가 나와 있다. 인자
 \texttt{old-guess}는 이전에 찾아낸 제곱근을, \texttt{guess}는
@@ -191,40 +172,37 @@
 
 다음은 새로 작성한 프로그램으로 아주 작은 수와 큰 수의 제곱근을 구한
 것이다. 이전과 달리 문제없이 제곱근을 구할 수 있다.
-\begin{lisp}
+\begin{scheme}
 > (sqrt (square 0.001))
 0.0010000001533016628
 > (sqrt 1e13)
 3162277.6601683795
-\end{lisp}
+\end{scheme}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.8}
 
-앞에서 작성한 제곱근 프로그램에서 \texttt{improve} 프로시저만 다음과 같이
-수정하면 쉽게 구현할 수 있다.
+앞에서 작성한 제곱근 프로그램에서 \texttt{improve} 프로시저만 제시된 식처럼
+수정하면 된다.
 
-\begin{lisp}
-(define (improve guess x)
-  (/ (+ (/ x (square guess)) (* 2 guess)) 3))
-\end{lisp}
+\schemein{./src/ch01-ex08.ss}
 
 다음은 작성한 프로그램으로 여러 세제곱근을 구한 것이다.
-\begin{lisp}
+\begin{scheme}
 > (sqrt 8)
 2.000000000012062
 > (sqrt (* 0.001 0.001 0.001))
 0.0010000009808132022
 > (sqrt (* 1e13 1e13 1e13))
 10000000000000.0
-\end{lisp}
+\end{scheme}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.9}
 
 첫번째 방식으로 구현되었을때 \texttt{(+ 4 5)}가 계산되는 과정은 다음과 같다.
 
-\begin{lisp}
+\begin{scheme}
 > (+ 4 5)
 > (if (= 4 0) 5 (inc (+ (dec 4) 5)))
 > (inc (+ 3 5))
@@ -240,13 +218,13 @@
 > (inc (inc 7))
 > (inc 8)
 9
-\end{lisp}
+\end{scheme}
 
 즉 첫번째 인자에 선형인 재귀 프로세스이다.\\
 
 다음은 두번째 방식으로 구현되었을때 \texttt{(+ 4 5)}가 계산되는 과정이다.
 
-\begin{lisp}
+\begin{scheme}
 > (+ 4 5)
 > (if (= 4 0) 5 (+ (dec 4) (inc 5)))
 > (+ 3 6)
@@ -258,7 +236,7 @@
 > (+ 0 9)
 > (if (= 0 0) 9 (+ (dec 0) (inc 9)))
 9
-\end{lisp}
+\end{scheme}
 
 앞의 구현과 달리 여기서는 첫번째 인자에 선형으로 반복 프로세스를
 수행한다. 이는 교재의 \texttt{fact-iter}와 유사한 구현이다. 주어지는 첫번째
@@ -272,7 +250,7 @@
 이하는 주어진 표현식이 계산되는 과정을 나타낸 것이다. 간략하게 표현하기 위해
 프로시저 몸체로 치환되는 과정은 생략하였다.
 
-\begin{lisp}
+\begin{scheme}
 > (A 1 10)
 > (A 0 (A 1 9))
 > (A 0 (A 0 (A 1 8)))
@@ -293,9 +271,9 @@
 > (A 0 (A 0 256))
 > (A 0 512)
 1024
-\end{lisp}
+\end{scheme}
 
-\begin{lisp}
+\begin{scheme}
 > (A 2 4)
 > (A 1 (A 2 3))
 > (A 1 (A 1 (A 2 2)))
@@ -313,13 +291,13 @@
 > (A 1 16)
   ...
 65536
-\end{lisp}
+\end{scheme}
 
-\begin{lisp}
+\begin{scheme}
 > (A 3 3)
   ...
 65536
-\end{lisp}
+\end{scheme}
 
 프로시저 \texttt{f}는 \texttt{A}에 첫번째
 인자로 \texttt{0}을 주므로 항상 \texttt{A} 내 \texttt{cond}의 두번째 경우로
@@ -327,7 +305,7 @@
 
 프로시저 \texttt{g}에 임의의 수를 넣어보면 다음과 같은 결과가 나온다.
 
-\begin{lisp}
+\begin{scheme}
 > (g 0)
 0
 > (g 1)
@@ -345,7 +323,7 @@
 > (g 4)
 16
   ...
-\end{lisp}
+\end{scheme}
 
 실제로 프로시저 \texttt{g}가 계산되는 과정을 자세히 살펴보면, 우선 주어진 인자만큼
 식 바깥쪽에 \texttt{(A 0 ...)}이 붙고, 맨 안쪽 식의 두번째 인자는 계속
@@ -356,7 +334,7 @@
 
 프로시저 \texttt{h}에 임의의 수를 넣어보면 다음과 같은 결과가 나온다.
 
-\begin{lisp}
+\begin{scheme}
 > (h 0)
 1
 > (h 1)
@@ -374,7 +352,7 @@
 > (g (g (g (h 1))))
 > (g (g (g 2)))
 65536
-\end{lisp}
+\end{scheme}
 
 즉, \texttt{(h~n)}은 $g^{(n-1)}(2)$를 계산하는 것과 동일하다.\\
 
@@ -385,34 +363,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.11}
 
-다음은 주어진 함수를 재귀 프로세스 방식으로 구현한 것이다.
+다음은 주어진 함수를 재귀 프로세스 및 반복 프로세스 방식으로 구현한 것이다.
 
-\begin{lisp}
-(define (f n)
-  (if (< n 3)
-      n
-      (+ (f (- n 1))
-         (* 2 (f (- n 2)))
-         (* 3 (f (- n 3))))))
-\end{lisp}
+\schemein{./src/ch01-ex11.ss}
 
-다음은 주어진 함수를 반복 프로세스 방식으로 구현한 것이다. 내부에 정의된
-프로시저 \texttt{f-iter}에는 계산에 필요한 이전 계산값 $f(n-1)$, $f(n-2)$,
-$f(n-3)$을 건네준다.
-
-\begin{lisp}
-(define (f n)
-  (define (f-iter counter fn1 fn2 fn3)
-    (if (> counter n)
-        fn1
-        (f-iter (+ counter 1)
-                (+ fn1 (* 2 fn2) (* 3 fn3))
-                fn1
-                fn2)))
-  (if (< n 3)
-      n
-      (f-iter 3 2 1 0)))
-\end{lisp}
+반복 프로세스 방식의 구현에서 정의된 프로시저 \texttt{f-iter}에는 계산에
+필요한 이전 계산값 $f(n-1)$, $f(n-2)$,$f(n-3)$이 인자로 넘어간다.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.12}
@@ -434,12 +390,7 @@ $f(n-3)$을 건네준다.
 이를 \SCHEME으로 구현한 코드는 다음과 같다 ($f$가 정의되는 범위내 인자만
 사용된다고 가정함).
 
-\begin{lisp}
-(define (pascal i j)
-  (cond ((or (= j 1) (= i j)) 1)
-        (else (+ (pascal (- i 1) (- j 1))
-                 (pascal (- i 1) j)))))
-\end{lisp}
+\schemein{./src/ch01-ex12.ss}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.13}
@@ -469,7 +420,7 @@ $\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으
     \FIB(k+1) &= \FIB(k) + \FIB(k-1)
   \end{align}
 
-  $n=k-1$일 경우 귀납 가정을 적용하여 정리하면 다음과 같다.
+  귀납 가정을 $n=k-1$ 일 경우 적용하면 다음과 같다.
   \begin{align}
     \FIB(k-1) &= \frac{\phi^{k-1} - \psi^{k-1}}{\sqrt{5}}
     \notag\\
@@ -505,12 +456,59 @@ $\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.14}
-\begin{figure}[h]
+
+그림 \ref{fig:count-change}\는 \texttt{(count-change 11)}가 계산되는 과정을 트리
+형태로 나타낸 것이다.
+
+\TODO
+
+\begin{figure}[t]
   \centering
   \includegraphics[width=1\textwidth]{ch01-ex14}
+  \caption{\texttt{(count-change 11)} 계산 과정을 나타내는 트리}
+  \label{fig:count-change}
 \end{figure}
-%\imgfile{res/ch01-ex14}{h}{0.55}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.15}
+
+다음은 \texttt{(sine 12.15)}가 계산되는 도중 프로시저 \texttt{p}가 호출되는
+모습을 나타낸 것이다 (몇몇 수는 소수점 이하가 정확하지 않을 수 있음).
+
+\begin{scheme}
+> (sine 12.15)
+> (p (sine 4.05))
+> (p (p (sine 1.3499999999)))
+> (p (p (p (sine 0.4499999999))))
+> (p (p (p (p (sine 0.15)))))
+> (p (p (p (p (p (sine 0.049999999999))))))
+> (p (p (p (p 0.1495))))
+> (p (p (p 0.43513455))))
+> (p (p 0.97584653))
+> (p -0.7895631)
+-0.39980345741334
+\end{scheme}
+
+\renewcommand{\theenumi}{\alph{enumi}}
+\begin{enumerate}
+\item \texttt{(sine 12.15)}를 계산할 때 프로시저 \texttt{p}는 5번 적용되었다.
+\item 프로시저 \texttt{p}는 주어진 인자에 계속 3을 나눠가면서 0.1 이하가 될
+  때까지 적용된다. 즉 $\Theta(log_3n)$의 계산횟수 증가율을 보인다. 그리고
+  계산횟수가 증가함에 따라 동일한 비율로 프로시저 \texttt{p} 호출 횟수가
+  증가하므로, 공간 증가율 역시 $\Theta(log_3n)$로 볼 수 있다.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.16}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.17}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.19}
 
 
 %%% Local Variables: 

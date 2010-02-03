@@ -1,0 +1,5 @@
+(define (square x) (* x x))
+(define (sum-ex x y z)
+  (if (> x y)
+      (+ (square x) (square (if (> y z) y z)))
+      (+ (square y) (square (if (> x z) x z)))))

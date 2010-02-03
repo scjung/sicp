@@ -10,6 +10,9 @@
   \usepackage[unicode,divpdfm,colorlinks]{hyperref}
 \fi
 
+\usepackage[T1]{fontenc}
+\usepackage[scaled]{beramono}
+
 \usepackage{amsmath, amssymb}
 \usepackage{graphics}
 \usepackage{listings}
@@ -36,6 +39,7 @@
 }
 
 \newcommand{\SCHEME}[0]{\textsf{Scheme}}
+\newcommand{\OCAML}[0]{\textsf{Objective-Caml}}
 
 \newcommand{\exercise}[1]{%
 \section*{Exercise #1}%
@@ -47,6 +51,8 @@
 \maketitle
 \tableofcontents
 \input{ch01}
+
+\input{app01}
 
 \end{document}
 

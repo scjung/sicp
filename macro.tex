@@ -65,14 +65,21 @@
 {
 \lstset{
   basicstyle=\small\ttfamily,
-  keywordstyle=\bfseries\ttfamily,
+  keywordstyle=\ttfamily\bfseries,
   commentstyle=\color[gray]{0.4},
   numbers=left,
   numberstyle=\tiny,
   numbersep=10pt,
 }
-\lstnewenvironment{lisp}
-  {\lstset{language=Lisp}}{}
+\lstdefinelanguage{Scheme}[]{Lisp}
+  {keywords={define,if,cond,else,and,or,not}
+  }
+\lstnewenvironment{scheme}
+  {\lstset{language=Scheme}}{}
+\lstnewenvironment{ocaml}
+  {\lstset{language=[Objective]Caml}}{}
+\newcommand{\schemein}[1]{\lstinputlisting[language=Scheme]{#1}}
+\newcommand{\ocamlin}[1]{\lstinputlisting[language={[Objective]Caml}]{#1}}
 }
 {}
 \makeatother
