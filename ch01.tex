@@ -532,6 +532,93 @@ $\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.19}
 
+$T_{pq}^2(a,b)$는 계산 결과는 다음과 같다.
+\begin{align}
+  a &\la (bp+aq)q + (bq+aq+ap)q + (bq+aq+ap)p \notag\\
+  b &\la (bp+aq)p + (bq+aq+ap)q \notag
+\end{align}
+
+각각의 결과를 정리하면 다음과 같다.
+\begin{align}
+    & (bp+aq)q + (bq+aq+ap)q + (bq+aq+ap)p \notag\\
+   =& b\cdot pq + a\cdot qq + b\cdot qq + a\cdot qq + a\cdot pq
+      + b\cdot pq + a\cdot pq + a\cdot pp \notag\\
+   =& b(2pq + qq) + a(2pq + qq) + a(pp+qq) \notag\\
+   \notag\\
+    & (bp+aq)p + (bq+aq+ap)q \notag\\
+   =& b\cdot pp + a\cdot pq + b\cdot qq + a\cdot qq + a\cdot pq \notag\\
+   =& b(pp+qq) + a(2pq+qq) \notag
+\end{align}
+
+즉, 다음과 같은 규칙이 성립한다.
+\begin{equation}\notag
+  T_{pq}^2 = T_{p'q'} \qquad \text{where } p'=pp+qq \text{~and~} q'=2pq+qq
+\end{equation}
+
+다음은 이러한 규칙을 이용하여 작성한 프로그램이다.
+\schemein{./src/ch01-ex19.ss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.20}
+
+다음은 normal-order 계산 방식을 사용할 때 \texttt{(gcd 206 40)}이 계산되는
+과정을 나타낸 것이다. \texttt{remainder}는 \texttt{r}로 줄여서,
+\texttt{remainder}가 수행된 횟수는 주석으로 기술하였다.
+
+\begin{scheme}
+> (gcd 206 40)
+> (if (= 40 0) 206 (gcd 40 (r 206 40)))
+> (gcd 40 (r 206 40))
+> (if (= (r 206 40) 0)
+    a
+    (gcd (r 206 40) (r 40 (r 206 40))))
+> (gcd (r 206 40) (r 40 (r 206 40)))                                 ; 1
+> (if (= (r 40 (r 206 40)) 0)
+      (r 206 40)
+      (gcd (r 40 (r 206 40))
+           (r (r 206 40) (r 40 (r 206 40)))))
+> (gcd (r 40 (r 206 40)) (r (r 206 40) (r 40 (r 206 40))))           ; 2
+> (if (= (r (r 206 40) (r 40 (r 206 40))) 0)
+      (r 40 (r 206 40))
+      (gcd (r (r 206 40) (r 40 (r 206 40)))
+           (r (r 40 (r 206 40)) (r (r 206 40) (r 40 (r 206 40))))))
+> (gcd (r (r 206 40) (r 40 (r 206 40)))
+           (r (r 40 (r 206 40)) (r (r 206 40) (r 40 (r 206 40)))))   ; 4
+> (if (= (r (r 40 (r 206 40)) (r (r 206 40) (r 40 (r 206 40)))) 0)
+      (r (r 206 40) (r 40 (r 206 40)))
+      (gcd (r (r 40 (r 206 40)) (r (r 206 40) (r 40 (r 206 40))))
+           (r (r (r 206 40) (r 40 (r 206 40)))
+              (r (r 40 (r 206 40)) (r (r 206 40) (r 40 (r 206 40)))))))
+> (r (r 206 40) (r 40 (r 206 40)))                                   ; 7
+> (r 6 4)                                                            ; 3
+2                                                                    ; 1
+\end{scheme}
+
+앞의 과정에서 볼 수 있듯이, normal-order 방식에서는 계산해야 하는 \texttt{remainder}가
+\texttt{gcd}를 계산하면서 자꾸만 늘어나게 된다. 결국 \texttt{(gcd 206 40)}을
+계산하기 위해 총 18번 \texttt{remainder}를 계산해야 한다.\\
+
+반면에 applicative-order 방식을 사용할 때는 다음과 같이 4번만
+\texttt{remainder}를 계산하면 \texttt{(gcd 206 40)}을 계산해 낼 수 있다.
+
+\begin{scheme}
+> (gcd 206 40)
+> (if (= 40 0) 206 (gcd 40 (r 206 40)))
+> (gcd 40 (r 206 40))
+> (gcd 40 6)                            ; 1
+> (if (= 6 0) 40 (gcd 6 (r 40 6)))
+> (gcd 6 (r 40 6))
+> (gcd 6 4)                             ; 1
+> (if (= 4 0) 6 (gcd 4 (r 6 4)))
+> (gcd 4 (r 6 4))
+> (gcd 4 2)                             ; 1
+> (if (= 2 0) 4 (gcd 2 (r 4 2)))
+> (gcd 2 (r 4 2))
+> (gcd 2 0)                             ; 1
+> (if (= 0 0) 2 (gcd 0 (r 2 0)))
+2
+\end{scheme}
+
 
 %%% Local Variables: 
 %%% mode: latex
