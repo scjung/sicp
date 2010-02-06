@@ -464,7 +464,7 @@ $\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\textwidth]{ch01-ex14}
+  \includegraphics[height=.65\textheight]{ch01-ex14}
   \caption{\texttt{(count-change 11)} 계산 과정을 나타내는 트리}
   \label{fig:count-change}
 \end{figure}
@@ -562,8 +562,9 @@ $T_{pq}^2(a,b)$는 계산 결과는 다음과 같다.
 \exercise{1.20}
 
 다음은 normal-order 계산 방식을 사용할 때 \texttt{(gcd 206 40)}이 계산되는
-과정을 나타낸 것이다. \texttt{remainder}는 \texttt{r}로 줄여서,
-\texttt{remainder}가 수행된 횟수는 주석으로 기술하였다.
+과정을 나타낸 것이다. \texttt{remainder}는 \texttt{r}로 줄여서
+기술하였다. 그리고 이전 단계에서 넘어오면서 \texttt{remainder}가 수행된 횟수를
+오른쪽에 주석으로 기술하였다.
 
 \begin{scheme}
 > (gcd 206 40)
@@ -594,12 +595,14 @@ $T_{pq}^2(a,b)$는 계산 결과는 다음과 같다.
 2                                                                    ; 1
 \end{scheme}
 
-앞의 과정에서 볼 수 있듯이, normal-order 방식에서는 계산해야 하는 \texttt{remainder}가
-\texttt{gcd}를 계산하면서 자꾸만 늘어나게 된다. 결국 \texttt{(gcd 206 40)}을
-계산하기 위해 총 18번 \texttt{remainder}를 계산해야 한다.\\
+앞의 과정에서 볼 수 있듯이, normal-order 방식에서는\texttt{gcd}를 계산하는
+과정에서 계산이 미뤄지는 \texttt{remainder}가 자꾸만 늘어나게 된다. 결국
+\texttt{(gcd 206 40)}을 계산하기 위해 총 18번 \texttt{remainder}를 계산해야
+한다. 이 중 대부분은 중복된 계산이다. \\
 
-반면에 applicative-order 방식을 사용할 때는 다음과 같이 4번만
-\texttt{remainder}를 계산하면 \texttt{(gcd 206 40)}을 계산해 낼 수 있다.
+다음은 applicative-order 방식에서의 \texttt{(gcd 206 40)}
+계산과정을 나타낸 것이다. 앞의 경우와 달리 4번만 \texttt{remainder}를
+계산하면 된다.
 
 \begin{scheme}
 > (gcd 206 40)
@@ -615,9 +618,94 @@ $T_{pq}^2(a,b)$는 계산 결과는 다음과 같다.
 > (if (= 2 0) 4 (gcd 2 (r 4 2)))
 > (gcd 2 (r 4 2))
 > (gcd 2 0)                             ; 1
-> (if (= 0 0) 2 (gcd 0 (r 2 0)))
+> (if (= 0 0) 2 (gcd 0 (r 2 0))) 
 2
 \end{scheme}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.21}
+
+\begin{scheme}
+> (smallest-divisor 199)
+199
+> (smallest-divisor 1999)
+1999
+> (smallest-divisor 19999)
+7
+\end{scheme}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.22}
+\schemeinp{./src/ch01-ex22.ss}{30}{34}
+
+다음은 구현한 프로그램을 이용하여 1000; 10,000; 100,000; 1,000,000 이상의 수
+중 가장 작은 소수 3개를 찾아본 것이다. 소수가 아닌 것에 대한 결과는 생략하였다.
+\begin{scheme}
+> (search-for-primes 1000 1020)
+ ...
+1009 *** 24
+ ...
+1013 *** 23
+ ...
+1019 *** 22
+> (search-for-primes 10000 10040)
+ ...
+10007 *** 47
+10009 *** 46
+ ...
+10037 *** 47
+ ...
+> (search-for-primes 100000 100050)
+ ...
+100003 *** 191
+ ...
+100019 *** 180
+ ...
+100043 *** 188
+ ...
+> (search-for-primes 1000000 1000040)
+ ...
+1000003 *** 570
+ ...
+1000033 *** 558
+ ...
+1000037 *** 555
+ ...
+\end{scheme}
+$24 \times \sqrt{10} \simeq 75.8946$이므로 1000과 10,000에 대해서는 예측이 잘
+맞지 않는다. 반면에 100,000과 1,000,000의 경우에는 $180 \times \sqrt{10}
+\simeq 569.2100$이므로 예측이 어느정도 맞는다. 즉 적은 계산량이 요구될 때는
+실제 눈에 보이는 계산 이외의 요소가 크게 작용하므로 예측에 잘 맞지 않으나, 큰
+계산량이 요구되면 그러한 부가적인 요소의 비율이 줄어들어 예측의 정확도가
+높아지게 된다.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{1.23}
+\schemeinp{./src/ch01-ex23.ss}{6}{13}
+
+새로 작성한 프로그램으로 앞에서 구한 소수를 다시 구해보면 다음과 같은 결과를
+얻는다.
+
+\begin{scheme}
+> (timed-prime-test 1009)
+
+1009 *** 32
+> (timed-prime-test 10007)
+
+10007 *** 50
+> (timed-prime-test 100003)
+
+100003 *** 130
+> (timed-prime-test 1000003)
+
+1000003 *** 377
+\end{scheme}
+
+예상과 달리 계산 속도가 두 배로 빨라지지 않는 것을 볼 수 있다. 앞의 두
+경우에는 오히려 속도가 느려지고, 나머지 두 경우에는 두 배가 아닌 대략 1.5배
+가량 빨라졌다. 이는 새로 추가된 \texttt{next} 프로시저를 계산하는 과정에서
+발생하는 부가적 비용 때문인 것으로 보인다.
+
 
 
 %%% Local Variables: 

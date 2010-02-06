@@ -79,7 +79,13 @@
 \lstnewenvironment{ocaml}
   {\lstset{language=[Objective]Caml}}{}
 \newcommand{\schemein}[1]{\lstinputlisting[language=Scheme]{#1}}
+\newcommand{\schemeinp}[3]{
+\lstinputlisting[language=Scheme,firstline=#2,lastline=#3]{#1}
+}
 \newcommand{\ocamlin}[1]{\lstinputlisting[language={[Objective]Caml}]{#1}}
+\newcommand{\ocamlinp}[3]{
+\lstinputlisting[language={[Objective]Caml},firstline=#2,lastline=#3]{#1}
+}
 }
 {}
 \makeatother
