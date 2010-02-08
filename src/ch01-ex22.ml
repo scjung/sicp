@@ -1,6 +1,4 @@
-(** This program uses Unix module (unix.cma).
-    If you want to use it in Objective Caml toplevel system,
-    you should execute '#load "unix.cma"' before loading the program. **)
+let runtime = Unix.gettimeofday
 
 let square n = n * n
 
@@ -26,11 +24,11 @@ let report_prime elapsed_time =
 let timed_prime_test n =
   let rec start_prime_test n start_time =
     if is_prime n then
-      report_prime ((Unix.gettimeofday ()) -. start_time)
+      report_prime ((runtime ()) -. start_time)
   in
     print_newline ();
     print_int n;
-    start_prime_test n (Unix.gettimeofday ())
+    start_prime_test n (runtime ())
 
 let rec search_for_primes n m =
   if n > m then
