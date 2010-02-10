@@ -2,7 +2,7 @@ let runtime = Unix.gettimeofday
 
 let square n = n * n
 
-let is_divides a b = (a mod b) = 0
+let is_divides a b = (b mod a) = 0
 
 let smallest_divisor n =
   let rec find_divisor n test_divisor =
