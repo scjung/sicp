@@ -8,14 +8,14 @@ let tolerance = 0.00001
 
 let fixed_point f first_guess =
   let is_close_enough v1 v2 = (abs_float (v1 -. v2)) < tolerance in
-  let rec try_ n guess =
+  let rec try_ guess =
     let next = f guess in
       if is_close_enough guess next then
         next
       else
-        try_ (n + 1) next
+        try_ next
   in
-    try_ 2 first_guess
+    try_ first_guess
 
 let fixed_point_of_transform g transform guess =
   fixed_point (transform g) guess
