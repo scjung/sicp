@@ -396,7 +396,8 @@
 \exercise{1.13}
 
 교재에서 제시된 방식대로 $\phi=(1+\sqrt{5})/2$, $\psi=(1-\sqrt{5})/2$ 일 때,
-$\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으로 증명한다.
+$\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으로
+증명한다. \TODO
 \newcommand{\FIB}[0]{\text{Fib}}
 \begin{itemize}
 \item $n=0$ 일 경우:
@@ -460,14 +461,20 @@ $\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으
 그림 \ref{fig:count-change}\는 \texttt{(count-change 11)}가 계산되는 과정을 트리
 형태로 나타낸 것이다.
 
-\TODO
-
 \begin{figure}[t]
   \centering
   \includegraphics[height=.65\textheight]{ch01-ex14}
   \caption{\texttt{(count-change 11)} 계산 과정을 나타내는 트리}
   \label{fig:count-change}
 \end{figure}
+
+공간 증가율은 계산 과정을 나타내는 트리의 깊이에 비례한다. 그림
+\ref{fig:count-change}를 보면, \texttt{cc}의 \texttt{kinds-of-coins} 인자가
+1이 된 후 \texttt{amount} 인자가 1씩 줄어드는 경로가 가장 깊이 파고드는 길임을
+알 수 있다. 즉, \texttt{count-change}의 인자를 $n$이라 할 때, 공간 증가율은
+$n$에 비례한다.
+
+계산횟수 증가율은 $n^2$이다. \TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{1.15}
@@ -493,9 +500,12 @@ $\text{Fib}(n)=(\phi^n - \psi^n) / \sqrt{5}$임을 다음과 같이 귀납적으
 \begin{enumerate}
 \item \texttt{(sine 12.15)}를 계산할 때 프로시저 \texttt{p}는 5번 적용되었다.
 \item 프로시저 \texttt{p}는 주어진 인자에 계속 3을 나눠가면서 0.1 이하가 될
-  때까지 적용된다. 즉 $\Theta(\log_3n)$의 계산횟수 증가율을 보인다. 그리고
+  때까지 적용된다. 즉 $\Theta(\log n)$의 계산횟수 증가율을
+  보인다.\footnote{로그 함수에서의 \KOEN{밑}{base}은 $\Theta$와 아무런 관련이
+    없음에 유의한다. 즉 $\Theta(\log_3 n) = \Theta(\log n)$이다. 교재의 각주 1.37을
+    참고하라.} 그리고
   계산횟수가 증가함에 따라 동일한 비율로 프로시저 \texttt{p} 호출 횟수가
-  증가하므로, 공간 증가율 역시 $\Theta(\log_3n)$로 볼 수 있다.
+  증가하므로, 공간 증가율 역시 $\Theta(\log n)$로 볼 수 있다.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
