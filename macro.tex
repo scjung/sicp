@@ -77,17 +77,19 @@
 \lstdefinelanguage{Scheme}[]{Lisp}
   {keywords={define,if,cond,else,and,or,not}
   }
-\lstnewenvironment{scheme}
-  {\lstset{language=Scheme}}{}
-\lstnewenvironment{ocaml}
-  {\lstset{language=[Objective]Caml}}{}
-\newcommand{\schemein}[1]{\lstinputlisting[language=Scheme]{#1}}
-\newcommand{\schemeinp}[3]{
+\newcommand{\scheme}[1]{\lstinputlisting[language=Scheme]{#1}}
+\newcommand{\schemepart}[3]{
 \lstinputlisting[language=Scheme,firstline=#2,lastline=#3]{#1}
 }
-\newcommand{\ocamlin}[1]{\lstinputlisting[language={[Objective]Caml}]{#1}}
-\newcommand{\ocamlinp}[3]{
+\newcommand{\schemefrom}[2]{
+\lstinputlisting[language=Scheme,firstline=#2]{#1}
+}
+\newcommand{\ocaml}[1]{\lstinputlisting[language={[Objective]Caml}]{#1}}
+\newcommand{\ocamlpart}[3]{
 \lstinputlisting[language={[Objective]Caml},firstline=#2,lastline=#3]{#1}
+}
+\newcommand{\ocamlfrom}[2]{
+\lstinputlisting[language={[Objective]Caml},firstline=#2]{#1}
 }
 }
 {}

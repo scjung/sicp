@@ -12,7 +12,7 @@
     (define r (remainder a 3))
     (* (cond ((= k 0) 1)
              ((= k n) 1)
-             ((= (remainder k 2) 0) 2)
+             ((even? k) 2)
              (else 4))
        (f (+ a (* k h)))))
   (* (/ h 3)

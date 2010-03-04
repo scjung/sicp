@@ -12,7 +12,7 @@ let approx_e k =
             (fun i -> 1.0)
             (fun i ->
                if (i mod 3) = 2 then
-                 float_of_int (i - (i / 3))
+                 float_of_int (((i + 1) / 3) * 2)
                else
                  1.0)
             k)

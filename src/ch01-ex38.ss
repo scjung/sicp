@@ -10,7 +10,6 @@
      (cont-frac (lambda (i) 1.0)
                 (lambda (i)
                   (if (= (remainder i 3) 2)
-                      (- i (floor (/ i 3)))
-                        ; 'floor' cuts out the fractional part
+                      (* (/ (+ i 1) 3) 2)
                       1.0))
                 k)))

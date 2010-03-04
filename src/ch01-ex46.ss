@@ -18,7 +18,7 @@
     (< (abs (- (square guess) x)) 0.001))
   (define (improve guess) (average guess (/ x guess)))
   ((iterative-improve good-enough? improve) 1.0))
-                      
+
 (define (fixed-point f first-guess)
   (define (close-enough? v1 v2)
     (< (abs (- v1 v2)) tolerance))

@@ -46,6 +46,13 @@
 \addcontentsline{toc}{section}{Exercise #1}%
 }
 
+\newcounter{myenumi}
+\newenvironment{MyEnum}
+  {\begin{list}{\alph{myenumi}.}%
+      {\setlength\leftmargin{0pt}%
+       \usecounter{myenumi}}}%
+  {\end{list}}
+
 \begin{document}
 
 \maketitle

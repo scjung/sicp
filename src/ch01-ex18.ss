@@ -6,7 +6,7 @@
 
 (define (fast-mul a b)
   (define (mul r a b)
-    (cond ((= b 0) 0)
+    (cond ((or (= a 0) (= b 0)) 0)
           ((= b 1) (+ r a))
           ((even? b) (mul r (double a) (halve b)))
           (else (mul (+ r a) a (- b 1)))))
