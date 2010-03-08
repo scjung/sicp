@@ -215,6 +215,29 @@ val average : float -> float -> float = <fun>
 \exercise{1.46}
 \ocamlfrom{./src/ch01-ex46.ml}{7}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.1}
+
+다음 구현처럼 \OCAML에서 값의 쌍을 다룰 때는 일반적인 리스트 대신
+\KOEN{튜플}{tuple}을 사용하는 것이 좋다.
+
+\ocamlfrom{./src/ch02-ex01.ml}{7}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.2}
+
+\SCHEME과 달리 \OCAML은 \KOEN{타입이 엄격한 언어}{strongly-typed
+  language} 이다. 이는 좀 더 견고한 프로그램을 만들 수 있게 해주는데, 다음
+구현이 그것의 한 예를 보여주고 있다. 여기서는 \texttt{point}, \texttt{segment}
+타입을 정의한 후 해당하는 \KOEN{구성자}{constructor}와
+\KOEN{선택자}{selector}가 의도한 타입의 값만을 받도록 하였다. 반면에
+앞에서 \SCHEME으로 작성한 \texttt{x-point} 프로시져는 가능한 값을 한정짓지
+않고 \texttt{car}를 적용하기 때문에, \texttt{(cons (cons 1 5) 3)}과 같은
+의도치 않은 값에 대해서도 결과를 내주게 된다.
+
+\ocaml{./src/ch02-ex02.ml}
+
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "master"
