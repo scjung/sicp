@@ -13,6 +13,35 @@
 
 \scheme{./src/ch02-ex02.ss}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.3}
+
+다음 구현에서 나타난 \texttt{make-rect} 프로시저는 구성하고자 하는 직사각형의
+왼쪽 상단과 오른쪽 하단의 점을 받고서
+(모든 내각이 직각인 사실을 바탕으로) 모든 점을 구해낸 후 \KOEN{쌍}{pair}의 쌍으로
+묶어낸다. 이러한 방식으로 구현된 전체 프로그램의 추상화 구조를 나타내면 그림
+\ref{fig:absrect}과 같다. 그림에서 볼 수 있듯이, 다른 구조로 직사각형을
+나타내고자 할 때에는 구성자와 꼭지점을 내주는 선택자만 변경하면 된다.
+\begin{figure}[t]
+  \centering
+  \HR{2em}\fbox{\parbox{27em}{\centering%
+      \texttt{width-rect height-rect perimeter-rect area-rect}%
+    }}\HR{2em}\vspace{1em}\\
+  네 변으로 구성되는 직사각형 \vspace{1em}\\
+  \HR{4em}\fbox{\parbox{23em}{\centering%
+      \texttt{top-segment-rect left-segment-rect ...}%
+    }}\HR{4em}\vspace{1em}\\
+  네 꼭지점으로 구성되는 직사각형 \vspace{1em}\\
+  \HR{3em}\fbox{\parbox{25em}{\centering%
+      \texttt{make-rect top-left-rect top-right-rect ...}}}\HR{3em}\vspace{1em}\\
+  쌍의 쌍으로 구성되는 직사각형 \vspace{1em}\\
+  \HR{11em}\fbox{\parbox{9em}{\centering\texttt{cons car cdr}}}\HR{11em}\vspace{1em}\\
+  어떻게든 구현된 쌍\vspace{1em}\\
+  \caption{직사각형 프로그램의 자료추상화 배리어}
+  \label{fig:absrect}
+\end{figure}
+
+\schemefrom{./src/ch02-ex03.ss}{29}
 
 
 
