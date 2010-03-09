@@ -82,19 +82,17 @@
 \lstdefinelanguage{Scheme}[]{Lisp}
   {keywords={define,if,cond,else,and,or,not}
   }
-\newcommand{\scheme}[1]{\lstinputlisting[language=Scheme]{#1}}
+\newcommand{\scheme}[2][1]{
+  \lstinputlisting[language=Scheme,firstline=#1]{#2}
+}
 \newcommand{\schemepart}[3]{
 \lstinputlisting[language=Scheme,firstline=#2,lastline=#3]{#1}
 }
-\newcommand{\schemefrom}[2]{
-\lstinputlisting[language=Scheme,firstline=#2]{#1}
+\newcommand{\ocaml}[2][1]{
+  \lstinputlisting[language={[Objective]Caml},firstline=#1]{#2}
 }
-\newcommand{\ocaml}[1]{\lstinputlisting[language={[Objective]Caml}]{#1}}
 \newcommand{\ocamlpart}[3]{
 \lstinputlisting[language={[Objective]Caml},firstline=#2,lastline=#3]{#1}
-}
-\newcommand{\ocamlfrom}[2]{
-\lstinputlisting[language={[Objective]Caml},firstline=#2]{#1}
 }
 }
 {}

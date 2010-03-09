@@ -6,7 +6,7 @@
 문제에서 제시하는 정리 방법을 간단히 말하면 분모가 항상 양수가 되게 하라는
 것이다. 즉 분모가 음수일 때 분자, 분모 각각의 부호를 바꾸어 주면 된다.
 
-\schemefrom{./src/ch02-ex01.ss}{6}
+\scheme[6]{./src/ch02-ex01.ss}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \exercise{2.2}
@@ -41,8 +41,33 @@
   \label{fig:absrect}
 \end{figure}
 
-\schemefrom{./src/ch02-ex03.ss}{29}
+\scheme[29]{./src/ch02-ex03.ss}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.4}
+
+다음은 `\texttt{(car (cons x y))}'가 계산되는 과정을 나타낸 것이다.
+
+\begin{lstlisting}[language=Scheme]
+> (car (cons x y))
+> (car (lambda (m) (m x y)))
+> (lambda (m) (m x y)) (lambda (p q) p)
+> (lambda (p q) p) x y
+x
+\end{lstlisting}
+
+\texttt{cdr} 프로시저는 다음과 같이 구현할 수 있다.
+\scheme[7]{./src/ch02-ex04.ss}
+
+다음은 `\texttt{(cdr (cons x y))}'가 계산되는 과정을 나타낸 것이다.
+
+\begin{lstlisting}[language=Scheme]
+> (cdr (cons x y))
+> (cdr (lambda (m) (m x y)))
+> (lambda (m) (m x y)) (lambda (p q) q)
+> (lambda (p q) q) x y
+y
+\end{lstlisting}
 
 
 %%% Local Variables: 
