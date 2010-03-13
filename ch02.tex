@@ -69,6 +69,115 @@ x
 y
 \end{lstlisting}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.5}
+
+주어진 식에 따르면 2는 $2^a$
+항만 나누어 떨어지게 할 수 있고, 3은 $3^b$만을 나누어 떨어지게 할 수 있다. 즉
+제안된 방식으로 표현된 양수쌍을 나머지가 없을 동안 계속
+2로 나누어 나가면 $3^b$ 항을 얻어낼 수 있으며, 반대로 3으로 나누어 나가면
+$2^a$ 항을 얻어낼 수 있다. 다음은 이러한 성질을 이용하여
+\texttt{cons}, \texttt{car}, \texttt{cdr} 프로시저를 구현한 것이다.
+
+\scheme{./src/ch02-ex05.ss}
+
+\SCHEME에서 기본으로 제공하는 \texttt{log} 프로시저는 자연로그임에 유의해야
+한다. 앞의 프로그램에서는 다음 성질을 이용하여 $\log_2,\log_3$을 계산하였다.
+
+\begin{equation}\notag
+  \log_a b = \frac{\log_c b}{\log_c a}
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.6}
+
+다음은 주어진 프로시저를 적용하여 \texttt{one}, \texttt{two}의 정의를 얻어낸
+것이다.
+
+\begin{lstlisting}[language=Scheme]
+;; one
+> (add-1 zero)
+> (add-1 (lambda (f) (lambda (x) x)))
+> (lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x))))
+> (lambda (f) (lambda (x) (f ((lambda (x) x) x))))
+(lambda (f) (lambda (x) (f x)))
+
+;; two
+> (add-1 one)
+> (add-1 (lambda (f) (lambda (x) (f x))))
+> (lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) (f x))) f) x))))
+> (lambda (f) (lambda (x) (f ((lambda (x) (f x)) x))))
+(lambda (f) (lambda (x) (f (f x))))
+\end{lstlisting}
+
+덧셈 연산에 해당하는 \texttt{+} 프로시저는 다음과 같이 주어진
+\texttt{f}, \texttt{x}를 앞의 수에 적용한 후, 그 결과를 연속적으로 뒤의 수에
+적용하는 식으로 구현할 수 있다.
+
+\scheme[10]{./src/ch02-ex06.ss}
+
+다음은 `\texttt{(+ one one)}'의 결과가 `\texttt{two}'가 되는지 확인해 본
+것이다. 치환과정을 간단히 나타내기 위해 계산순서를 약간 달리 하였다.
+
+\begin{lstlisting}[language=Scheme]
+> (+ one one)
+> (lambda (f) (lambda (x) ((one f) ((one f) x))))
+> (lambda (f) (lambda (x) ((lambda (x) (f x)) ((lambda (x) (f x)) x))))
+> (lambda (f) (lambda (x) ((lambda (x) (f x)) (f x))))
+(lambda (f) (lambda (x) (f (f x))))
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.7}
+
+\scheme[20]{./src/ch02-ex07.ss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.8}
+
+다음 성질을 이용하면 두 구간의 차를 쉽게 구할 수 있다.
+
+\begin{equation}\notag
+  x-y=x+(-y)
+\end{equation}
+
+두 구간의 차를 구하려면 일단 두번째 구간의 상한과 하한에 -를 취하고, 부호가
+바뀌면 크기 관계가 뒤바뀌는 것을 고려하여 상한과 하한을 바꾼다. 이렇게 바뀐
+구간과 첫번째 구간을 더하면 결과를 얻을 수 있다. 다음은 이러한 방식으로 구현한
+\texttt{sub-interval} 프로시저이다.
+
+\scheme[24]{./src/ch02-ex08.ss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercise{2.9}
+
+상한 $u$와 하한 $l$로 이루어지는 구간 $i$를 다음과 같이 표현하자.
+\begin{equation}\notag
+  i = [l, u]
+\end{equation}
+
+두 구간 $i_1=[l_1,u_1]$, $i_2=[l_2,u_2]$를 더한 구간의 너비 $w$는 다음과 같다.
+\begin{align}
+  w(i_1 + i_2) & = w([l_1+l_2,u_1+u_2])
+  \notag\\
+  & = \frac{(u_1+u_2)-(l_1+l_2)}{2}
+  \notag\\
+  & = \frac{u_1-l_1}{2} + \frac{u_2-l_2}{2}
+  \notag\\
+  & = w(i_1) + w(i_2)
+  \notag
+\end{align}
+
+즉, 더한 결과에 구간을 적용하는 것과 구간을 적용한 후 더하는 것 모두 같은
+결과를 내준다. 두 구간을 빼는 경우에도 마찬가지로 이러한 성질이
+적용된다. 하지만 곱셈과 나눗셈의 경우에는 성질을 적용할 수 없다. 다음은 성질을
+만족하지 않는 한 예이다.
+\begin{align}
+  w([-2,2]\times[4,8]) & = w([-8,16]) = 12 \notag \\
+  w([-2,2]) \times w([4,8]) & = 2 \times 2 = 4 \notag \\
+  w([-2,2]/[4,8]) & = w([-0.5,0.5]) = 0.5 \notag \\
+  w([-2,2]) / w([4,8]) & = 2 / 2 = 1 \notag
+\end{align}
 
 %%% Local Variables: 
 %%% mode: latex
