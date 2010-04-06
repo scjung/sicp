@@ -1,6 +1,6 @@
 digraph G {
-size="6.5,6.5";
-ratio="compress";
+// size="6.5,6.5";
+// ratio="compress";
 1 [label="count-change 11", shape="none", fontsize=15, fontname="Courier New Bold"];
 2 [label="cc 11 5", shape="none", fontsize=15, fontname="Courier New Bold"];
 21 [label="cc 11 4", shape="none", fontsize=15, fontname="Courier New Bold"];
